@@ -1,25 +1,9 @@
 const fs = require("fs");
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false
-});
 const { fromBrain } = require("./index.js");
+const file = process.argv[2];
 
-const bfFiles = fs.readdirSync("./").filter(v => v.includes(".bf"));
+if(!file) throw new Error("Please specify a .bf file to run");
 
-readline.question("Which file should be run?\n" + bfFiles.join(",\n") + "\n\n>", async file => {
-    if(bfFiles.indexOf(file) + 1) {
-        let bf = fs.readFileSync("./" + file, "utf-8");
+const bf = fs.readFileSync("./" + file, "utf-8");
 
-        if(bf) {
-            console.log(await fromBrain(bf.replace(/\n/, "")));
-        } else {
-            console.error("\n\nFile empty");
-        }
-    } else {
-        console.error("\n\nFile not found");
-    }
-
-    readline.close();
-});
+fromBrain(bf.replace(/\n/, "")).then(console.log);

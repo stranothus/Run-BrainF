@@ -30,6 +30,7 @@ async function fromBrain(input) {
     let cursor = [];
     let rn = 0;
     let startLoop;
+    let lastLoop = 0;
     let s = input.split("");
     for(let i = 0; i < s.length; i++) {
         let e = s[i];
@@ -55,7 +56,9 @@ async function fromBrain(input) {
             break;
             case "]":
                 if(startLoop !== undefined && cursor[rn]) {
+                    if(cursor[rn] >= lastLoop) throw new Error("BrainFuck infinite loop detected!" + rn);
                     i = startLoop;
+                    lastLoop = cursor[rn];
                 } else {
                     startLoop = undefined;
                 }
@@ -75,6 +78,8 @@ async function fromBrain(input) {
             break;
         }
     }
+
+    if(startLoop) throw new Error("BrainFuck syntax error! Loop never closed! " + startLoop);
     
     return cursor.filter(e => typeof e === "string").join("");
 }
