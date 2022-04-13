@@ -56,7 +56,6 @@ async function fromBrain(input) {
             break;
             case "]":
                 if(startLoop !== undefined && cursor[rn]) {
-                    if(cursor[rn] >= lastLoop) throw new Error("BrainFuck infinite loop detected!" + rn);
                     i = startLoop;
                     lastLoop = cursor[rn];
                 } else {
